@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "first-post"
-date: 2024-04-09 16:44:30 -0000
-categories: test
+title:  "Welcome to Jekyll!"
 ---
 
-Welcome, this is my first blog post on my github pages!
-I learned how to use github pages, yeah!
+# Welcome
+
+**Hello world**, this is my first Jekyll blog post.
+
+I hope you like it!
