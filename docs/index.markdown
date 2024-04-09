@@ -4,7 +4,7 @@
 
 layout: home
 title: "home"
-permalink: /URL-PATH
+permalink: /
 ---
 
 This is the home page of my github pages. Welcome!
