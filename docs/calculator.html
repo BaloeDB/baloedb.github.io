@@ -1,0 +1,180 @@
+---
+layout: page
+title: "calculator"
+permalink: /static/calculator
+---
+
+<!DOCTYPE html>
+<!-- TODO: Better Documentation -->
+<!-- TODO: Remove repetition in classes -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Calculator</title>
+  </head>
+  <body class="h-screen flex items-center justify-center">
+    <div class="flex flex-wrap bg-gray-800 w-64 p-3 box-border text-white text-2xl">
+      <div id="output" class="w-full h-16 text-right text-black text-4xl p-2 mb-2 bg-gray-300">0</div>
+      <!-- First section -->
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="reset()">C</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="useResult()">R</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="perform('%')">%</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="perform('/')">÷</button>
+      <!-- Second section -->
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(7)">7</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(8)">8</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(9)">9</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="perform('*')">x</button>
+      <!-- Third section -->
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(4)">4</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(5)">5</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(6)">6</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="perform('-')">-</button>
+      <!-- Fourth section -->
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(1)">1</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(2)">2</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(3)">3</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="perform('+')">+</button>
+      <!-- Sixth section -->
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="swap()">+/-</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="clickNumber(0)">0</button>
+      <button class="w-1/4 h-16 bg-slate-400 border-2 border-gray-800 border-solid"
+              onClick="toggle()">.</button>
+      <button class="w-1/4 h-16 bg-gray-600 border-2 border-gray-800 border-solid"
+              onClick="getResult()">=</button>
+    </div>
+    <!-- Javascript should be at the bottom to work -->
+    <script>
+      // State
+      let result = 0;
+      let current = 0;
+      let operator = "";
+      let inIntMode = true;
+
+      // Output
+      const output = document.querySelector("#output");
+      const setSign = (number) => {
+        return (number < 0 ? "-" : "") + Math.abs(number);
+      }
+      const setPrecision = (number, str) => {
+        if (!inIntMode && !str.includes(".")) {
+          str += ".0";
+        }
+        return str;
+      }
+      const setExponent = (number, str) => {
+        if (str.length >= 10) {
+          str = (number < 0 ? "-" : "") + number.toExponential(2);
+        }
+        return str;
+      }
+      
+      const setOutput = (number) => {
+        let str = setSign(number);
+        str = setPrecision(number, str);
+        str = setExponent(number, str);
+        output.innerHTML = str;
+      }
+
+      // Clicking a number
+      const clickNumber = (number) => {
+        let updated;
+        if (inIntMode || ("" + current).includes(".")) {
+          updated = parseFloat("" + current + number);
+        } else {
+          updated = parseFloat("" + current + "." + number);
+        }
+        current = updated;
+        setOutput(updated)
+      }
+
+      // Reset
+      const reset = () => {
+        operator = "";
+        result = 0;
+        clear();
+      }
+    
+      const clear = () => {
+        inIntMode = true;
+        current = 0;
+        setOutput(current);
+      }
+
+      // Performing calculations
+      const resolve = () => {
+        if (operator === "+") {
+          result += current;
+        }
+        else if (operator === "-") {
+          result -= current;
+        }
+        else if (operator === "*") {
+          result *= current;
+        }
+        else if (operator === "%") {
+          result %= current;
+        }
+        else if (operator === "/") {
+          result /= current;
+        } else {
+          result += current;
+        }
+      }
+
+      const perform = (op) => {
+        resolve();
+        operator = op;
+        clear();
+      }
+
+      // Get result
+      const getResult = () => {
+        resolve();
+        clear();
+        setOutput(result);
+        operator = "";
+        current = 0;
+      }
+
+      // Swap sign
+      const swap = () => {
+        current = -current;
+        setOutput(current);
+      }
+
+      // Toggle mode
+      const toggle = () => {
+        inIntMode = !inIntMode;
+        setOutput(current);
+      }
+
+      // Use previous result
+      const useResult = () => {
+        current = result; 
+        setOutput(current);
+      }
+    </script>
+  </body>
+</html>
