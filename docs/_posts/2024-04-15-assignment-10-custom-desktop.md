@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Assignment 10: Custom desktop"
-date:   2024-04-12 17:35:00 +0200
+date:   2024-04-15 16:13:00 +0200
 categories: itvitae bonustrack
 ---
 
@@ -19,8 +19,9 @@ This exercise has multiple objectives:
 I created a simple desktop. It does not have many features:
 1. Taskbar
 2. Background
-3. Customized menu
+3. Customized menu & keybinds
 4. Theming & Fonts
+5. Determine display script
 
 I downloaded a couple apps to manage my openbox configuration:
 1. ObMenu
